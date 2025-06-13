@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo do Quadrado</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      background-color: #e0e0e0;
+      overflow: hidden;
+      border: 2px solid #333;
+    }
+
+    .square {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      cursor: pointer;
+    }
+
+    #score {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Jogo do Quadrado</h1>
+  <div id="score">Pontuação: 0</div>
+  <div id="gameArea"></div>
+
+  <script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('score');
+    let score = 0;
+    let square;
+    let timeout;
+
+    function createSquare() {
+      if (square) square.remove();
+
+      square = document.createElement('div');
+      square.classList.add('square');
+
+      const maxX = gameArea.clientWidth - 50;
+      const maxY = gameArea.clientHeight - 50;
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      square.style.left = `${randomX}px`;
+      square.style.top = `${randomY}px`;
+
+      gameArea.appendChild(square);
+
+      square.onclick = () => {
+        score++;
+        scoreDisplay.textContent = 'Pontuação: ' + score;
+        clearTimeout(timeout);
+        createNewRound();
+      };
+
+      timeout = setTimeout(() => {
+        alert('Você perdeu! Pontuação final: ' + score);
+        score = 0;
+        scoreDisplay.textContent = 'Pontuação: ' + score;
+        createNewRound();
+      }, 2000);
+    }
+
+    function createNewRound() {
+      setTimeout(createSquare, 500);
+    }
+
+    createNewRound();
+  </script>
+
+</body>
+</html>
